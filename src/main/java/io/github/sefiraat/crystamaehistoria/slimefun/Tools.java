@@ -22,14 +22,11 @@ import io.github.sefiraat.crystamaehistoria.slimefun.items.tools.plates.ChargedP
 import io.github.sefiraat.crystamaehistoria.slimefun.items.tools.satchel.CrystamageSatchel;
 import io.github.sefiraat.crystamaehistoria.slimefun.items.tools.stave.Stave;
 import io.github.sefiraat.crystamaehistoria.stories.definition.StoryType;
-import io.github.sefiraat.networks.slimefun.NetworksSlimefunItemStacks;
-import io.github.sefiraat.networks.slimefun.network.NetworkBridge;
-import io.github.sefiraat.networks.slimefun.network.NetworkMonitor;
-import com.github.drakescraft_labs.slimefun4.api.items.SlimefunItem;
-import com.github.drakescraft_labs.slimefun4.api.recipes.RecipeType;
-import com.github.drakescraft_labs.slimefun4.implementation.SlimefunItems;
-import com.github.drakescraft_labs.slimefun4.implementation.items.cargo.CargoConnectorNode;
-import com.github.drakescraft_labs.slimefun4.implementation.items.electric.EnergyConnector;
+import io.github.thebusybiscuit.slimefun4.api.items.SlimefunItem;
+import io.github.thebusybiscuit.slimefun4.api.recipes.RecipeType;
+import io.github.thebusybiscuit.slimefun4.implementation.SlimefunItems;
+import io.github.thebusybiscuit.slimefun4.implementation.items.cargo.CargoConnectorNode;
+import io.github.thebusybiscuit.slimefun4.implementation.items.electric.EnergyConnector;
 import lombok.Getter;
 import lombok.experimental.UtilityClass;
 import org.bukkit.Material;
@@ -633,27 +630,53 @@ public class Tools {
         }
 
         if (SupportedPluginManager.isNetworks()) {
-
-            // Networks Cover
-            RecipeItem networksCoverRecipe = new RecipeItem(
-                NetworksSlimefunItemStacks.NETWORK_BRIDGE,
-                StoryType.MECHANICAL, 10,
-                StoryType.HUMAN, 10,
-                StoryType.VOID, 10
-            );
-            networkNodeCover = new BlockVeil(
-                ItemGroups.TOOLS,
-                CrystaStacks.NETWORKS_COVER,
-                CrystaRecipeTypes.LIQUEFACTION_CRAFTING,
-                networksCoverRecipe.getDisplayRecipe(),
-                CrystaStacks.NETWORKS_COVER.asQuantity(8),
-                NetworkBridge.class,
-                NetworkMonitor.class
-            );
-
-            networkNodeCover.register(plugin);
-
-            LiquefactionBasinCache.addCraftingRecipe(networkNodeCover, networksCoverRecipe);
+            setupNetworksCover(plugin);
         }
+    }
+
+    /**
+     * 26.x: Networks solo se publica compilado contra la API propietaria, asi que el
+     * puente y las clases se resuelven en tiempo de ejecucion. Si el Networks instalado
+     * no comparte el SlimefunItem universal, el velo se omite con un aviso.
+     */
+    @SuppressWarnings("unchecked")
+    private static void setupNetworksCover(CrystamaeHistoria plugin) {
+        final SlimefunItem bridge = SlimefunItem.getById("NTW_BRIDGE");
+        final Class<? extends SlimefunItem> bridgeClass;
+        final Class<? extends SlimefunItem> monitorClass;
+        try {
+            bridgeClass = Class.forName("io.github.sefiraat.networks.slimefun.network.NetworkBridge")
+                .asSubclass(SlimefunItem.class);
+            monitorClass = Class.forName("io.github.sefiraat.networks.slimefun.network.NetworkMonitor")
+                .asSubclass(SlimefunItem.class);
+        } catch (ClassNotFoundException | ClassCastException | LinkageError e) {
+            plugin.getLogger().warning("Networks no es compatible con el Slimefun universal; se omite el velo de Networks.");
+            return;
+        }
+        if (bridge == null) {
+            plugin.getLogger().warning("Networks no registro NTW_BRIDGE; se omite el velo de Networks.");
+            return;
+        }
+
+        // Networks Cover
+        RecipeItem networksCoverRecipe = new RecipeItem(
+            bridge.getItem(),
+            StoryType.MECHANICAL, 10,
+            StoryType.HUMAN, 10,
+            StoryType.VOID, 10
+        );
+        networkNodeCover = new BlockVeil(
+            ItemGroups.TOOLS,
+            CrystaStacks.NETWORKS_COVER,
+            CrystaRecipeTypes.LIQUEFACTION_CRAFTING,
+            networksCoverRecipe.getDisplayRecipe(),
+            CrystaStacks.NETWORKS_COVER.asQuantity(8),
+            bridgeClass,
+            monitorClass
+        );
+
+        networkNodeCover.register(plugin);
+
+        LiquefactionBasinCache.addCraftingRecipe(networkNodeCover, networksCoverRecipe);
     }
 }

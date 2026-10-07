@@ -1,6 +1,6 @@
 package io.github.sefiraat.crystamaehistoria.utils.datatypes;
 
-import dev.drake.dough.data.persistent.PersistentDataAPI;
+import io.github.thebusybiscuit.slimefun4.libraries.dough.data.persistent.PersistentDataAPI;
 import lombok.experimental.UtilityClass;
 import org.bukkit.NamespacedKey;
 import org.bukkit.persistence.PersistentDataContainer;

@@ -27,14 +27,13 @@ import io.github.sefiraat.crystamaehistoria.slimefun.Gadgets;
 import io.github.sefiraat.crystamaehistoria.slimefun.ItemGroups;
 import io.github.sefiraat.crystamaehistoria.slimefun.Materials;
 import io.github.sefiraat.crystamaehistoria.slimefun.Mechanisms;
-import io.github.sefiraat.crystamaehistoria.slimefun.NetheoPlants;
 import io.github.sefiraat.crystamaehistoria.slimefun.Runes;
 import io.github.sefiraat.crystamaehistoria.slimefun.Tools;
 import io.github.sefiraat.crystamaehistoria.slimefun.Uniques;
 import io.github.sefiraat.crystamaehistoria.slimefun.items.mechanisms.chroniclerpanel.ChroniclerPanel;
 import io.github.sefiraat.crystamaehistoria.slimefun.items.mechanisms.chroniclerpanel.ChroniclerPanelCache;
 import io.github.sefiraat.crystamaehistoria.stories.BlockDefinition;
-import dev.drake.dough.collections.Pair;
+import io.github.thebusybiscuit.slimefun4.libraries.dough.collections.Pair;
 
 
 import org.bukkit.plugin.PluginManager;
@@ -206,9 +205,13 @@ public class CrystamaeHistoria extends AbstractAddon {
         Uniques.setup();
         Runes.setup();
         if (supportedPluginManager.isNetheopoiesis()){
+            // 26.x: NetheoPlants no se compila (Netheopoiesis solo existe contra la API
+            // propietaria); se invoca por reflexion para no fallar si falta la clase.
             try {
-                NetheoPlants.setup();
-            } catch (NoClassDefFoundError e) {
+                Class.forName("io.github.sefiraat.crystamaehistoria.slimefun.NetheoPlants")
+                    .getMethod("setup")
+                    .invoke(null);
+            } catch (ReflectiveOperationException | LinkageError e) {
                 getLogger().severe("Netheopoiesis must be updated to meet Crystamaes requirements.");
             }
         }

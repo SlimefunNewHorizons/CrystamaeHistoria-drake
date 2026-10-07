@@ -2,8 +2,8 @@ package io.github.sefiraat.crystamaehistoria.commands;
 
 import dev.drake.infinitylib.commands.SubCommand;
 import io.github.sefiraat.crystamaehistoria.slimefun.ItemGroups;
-import com.github.drakescraft_labs.slimefun4.api.player.PlayerProfile;
-import com.github.drakescraft_labs.slimefun4.core.guide.SlimefunGuideMode;
+import io.github.thebusybiscuit.slimefun4.api.player.PlayerProfile;
+import io.github.thebusybiscuit.slimefun4.core.guide.SlimefunGuideMode;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;

@@ -6,8 +6,8 @@ import io.github.sefiraat.crystamaehistoria.magic.spells.spellobjects.MagicFalli
 import io.github.sefiraat.crystamaehistoria.magic.spells.spellobjects.MagicProjectile;
 import io.github.sefiraat.crystamaehistoria.magic.spells.spellobjects.MagicSummon;
 import io.github.sefiraat.crystamaehistoria.runnables.spells.SpellTickRunnable;
-import dev.drake.dough.blocks.BlockPosition;
-import dev.drake.dough.collections.Pair;
+import io.github.thebusybiscuit.slimefun4.libraries.dough.blocks.BlockPosition;
+import io.github.thebusybiscuit.slimefun4.libraries.dough.collections.Pair;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
