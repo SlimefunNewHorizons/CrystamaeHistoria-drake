@@ -116,7 +116,7 @@ public class MainFlexGroup extends FlexItemGroup {
                 .content("Abre la guia de Crystamae DrakesCraft")
                 .color(TextColor.color(175, 200, 60))
                 .clickEvent(ClickEvent.openUrl(
-                    "https://github.com/DrakesCraft-Labs/CrystamaeHistoria-drake#readme"))
+                    "https://github.com/SlimefunNewHorizons/CrystamaeHistoria-drake#readme"))
                 .build();
             player1.sendMessage(link);
             return false;
